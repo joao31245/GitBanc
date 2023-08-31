@@ -15,7 +15,7 @@ public class Conta {
 	private Integer codigo;
 	private MySQLConnection connection;
 
-	public Conta(Integer numero, Integer agencia, double saldo, Integer codigo) {
+	public Conta(Integer numero, Integer agencia, double saldo, Integer codigo) throws Exception {
 		connection = new MySQLConnection();
 		this.setNumero(numero);
 		this.setAgencia(agencia);
@@ -69,5 +69,19 @@ public class Conta {
 	public double getSaldo() {
 		return saldo;
 	}
-
+	
+@Override
+public boolean equals(Object obj) {
+	// TODO Auto-generated method stub
+	Conta cast = (Conta) obj;
+	
+	if(this.getAgencia() == cast.getAgencia() &&
+	   this.getNumero() == cast.getNumero() &&
+	   this.getCodigo() == cast.getCodigo() &&
+	   this.getSaldo() == cast.getSaldo()) {
+		return true;
+	} else {
+		return false;
+	}
+}
 }

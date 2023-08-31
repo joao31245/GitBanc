@@ -3,8 +3,10 @@ package br.com.bancouniversal.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.mysql.cj.protocol.Resultset;
 import com.mysql.cj.x.protobuf.MysqlxExpect;
 
 import br.com.bancouniversal.modelo.Cliente;
@@ -17,7 +19,7 @@ public class MySQLConnection implements AutoCloseable{
 	    private static final String PASSWORD = "duda#123A";
 	    private static Connection connection;
 
-	    public static Connection getConnection() {
+	    public static Connection getConnection(){
 	    	 try {
 	    		Class.forName("com.mysql.cj.jdbc.Driver");
 	    		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/banco", 
@@ -33,7 +35,7 @@ public class MySQLConnection implements AutoCloseable{
 
 	    }
 	    
-	    public void insertDataConta(Conta conta) {
+	    public void insertDataConta(Conta conta) throws Exception {
 	    	String insertQuery = "INSERT INTO Conta(codigo,numero,agencia,saldo) values(?,?,?,?)";
 	    	
 	    	try(	Connection connection =
@@ -52,7 +54,9 @@ public class MySQLConnection implements AutoCloseable{
 	    	} catch(SQLException e) {
 	    		System.out.println("Falha ao inserir dados.");
 				e.getStackTrace();
-			} 
+			} finally {
+				close();
+			}
 	    	
 	    }
 	    
@@ -87,6 +91,32 @@ public class MySQLConnection implements AutoCloseable{
  	    	}
 	    }
 	    
+	    public void selectFromTable(int codigo) {
+	    	String select = "SELECT * FROM  Clientes WHERE codigo = " + codigo ;
+	    	try(Connection connection = MySQLConnection.getConnection();
+	    	PreparedStatement preparedStatement = connection.prepareStatement(select);) {
+	    		System.out.println("Deu certo");
+	    		
+	    	try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	             while (resultSet.next()) {
+	               int coluna1 = resultSet.getInt("id"); // Substitua 'nome_da_coluna1' pelo nome da coluna
+	               String coluna2 = resultSet.getString("nome"); // Substitua 'nome_da_coluna2' pelo nome da coluna
+	               String coluna3 = resultSet.getString("cpf");
+	               int coluna4 = resultSet.getInt("codigo");
+	                // Continue lendo os valores das outras colunas conforme necessário
+	                
+	                System.out.println("Coluna1: " + coluna1 +
+	                		", Coluna2: " + coluna2
+	                		+ ", Coluna3: " + coluna3 
+	                		+ ", Coluna2: " + coluna4);
+	                }
+	            }
+	    	} catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    	
+	    }
+	    
 	    public static void closeConnection(Connection connection) {
 	        if (connection != null) {
 	            try {
@@ -103,5 +133,6 @@ public class MySQLConnection implements AutoCloseable{
 		public void close() throws Exception {
 			// TODO Auto-generated method stub
 			closeConnection(getConnection());
+			System.out.println("Fechando conexão");
 		}
 }

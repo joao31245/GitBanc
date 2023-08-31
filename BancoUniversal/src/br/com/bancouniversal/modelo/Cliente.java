@@ -8,7 +8,7 @@ private static Integer codigo;
 private Conta conta;
 private static MySQLConnection connection;
 
-public Cliente(String nome, String cpf) {
+public Cliente(String nome, String cpf) throws Exception {
 	
 	connection = new MySQLConnection();
 	
@@ -29,6 +29,18 @@ public Cliente(String nome, String cpf) {
 	
 	this.setConta(conta);
 }
+
+@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		Cliente cast = (Cliente) obj;
+		if(this.getNome() == cast.getNome() &&
+			this.getCpf() == cast.getCpf()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 public String getNome() {
 	return nome;
