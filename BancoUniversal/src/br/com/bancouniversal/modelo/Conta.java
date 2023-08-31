@@ -71,17 +71,11 @@ public class Conta {
 	}
 	
 @Override
-public boolean equals(Object obj) {
+public String toString() {
 	// TODO Auto-generated method stub
-	Conta cast = (Conta) obj;
-	
-	if(this.getAgencia() == cast.getAgencia() &&
-	   this.getNumero() == cast.getNumero() &&
-	   this.getCodigo() == cast.getCodigo() &&
-	   this.getSaldo() == cast.getSaldo()) {
-		return true;
-	} else {
-		return false;
-	}
+	return "Codigo:" + this.getCodigo() + " Numero: "
+			+ this.getNumero() +
+			" Agencia" + this.getAgencia() +
+			" Saldo: " + this.getSaldo();
 }
 }

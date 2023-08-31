@@ -46,6 +46,11 @@ public String getNome() {
 	return nome;
 }
 
+@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Titular:" + this.getNome() + " Cpf:"  + this.getCpf() + " Codigo:" + this.getCodigo();
+	}
 
 public void setNome(String nome) {
 	this.nome = nome;
@@ -82,3 +87,4 @@ public void setConta(Conta conta) {
 }
 
 }
+
