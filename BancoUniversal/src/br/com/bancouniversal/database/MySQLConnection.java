@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.mysql.cj.x.protobuf.MysqlxExpect;
 
+import br.com.bancouniversal.modelo.Cliente;
 import br.com.bancouniversal.modelo.Conta;
 
 public class MySQLConnection implements AutoCloseable{
@@ -35,8 +36,10 @@ public class MySQLConnection implements AutoCloseable{
 	    public void insertDataConta(Conta conta) {
 	    	String insertQuery = "INSERT INTO Conta(codigo,numero,agencia,saldo) values(?,?,?,?)";
 	    	
-	    	try(	Connection connection = MySQLConnection.getConnection();
-	    			PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+	    	try(	Connection connection =
+	    			MySQLConnection.getConnection();
+	    			PreparedStatement preparedStatement = 
+	    			connection.prepareStatement(insertQuery)) {
 	    		
 	    		preparedStatement.setInt(1, conta.getCodigo());
 	    		preparedStatement.setInt(2, conta.getNumero());
@@ -51,6 +54,24 @@ public class MySQLConnection implements AutoCloseable{
 				e.getStackTrace();
 			} 
 	    	
+	    }
+	    
+	    public void insertDataCliente(Cliente cliente) {
+	    	String insertQuerry = "INSERT INTO Clientes(nome,cpf,codigo) VALUES(?,?,?)";
+	    	try(Connection connection =
+	    		MySQLConnection.getConnection();
+	    		PreparedStatement preparedStatement = 
+	    		connection.prepareStatement(insertQuerry)) {
+	    		
+	    		preparedStatement.setString(1, cliente.getNome());
+	    		preparedStatement.setString(2, cliente.getCpf());
+	    		preparedStatement.setInt(3, cliente.getCodigo());
+	    		int rowsAffected = preparedStatement.executeUpdate();
+	    		System.out.println("Dados de cliente inseridos!");
+	    	}
+	    	catch(SQLException ex) {
+	    		System.out.println("Erro de conexão");
+	    	}
 	    }
 	    
 	    public void updateData( Double update, Integer codigo ) {
